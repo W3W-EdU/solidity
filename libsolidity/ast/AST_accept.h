@@ -93,6 +93,8 @@ void ContractDefinition::accept(ASTVisitor& _visitor)
 		if (m_documentation)
 			m_documentation->accept(_visitor);
 		listAccept(m_baseContracts, _visitor);
+		if (m_storageBaseLocation)
+			m_storageBaseLocation->accept(_visitor);
 		listAccept(m_subNodes, _visitor);
 	}
 	_visitor.endVisit(*this);
@@ -1164,7 +1166,7 @@ void ForAllQuantifier::accept(ASTConstVisitor& _visitor) const
 void StorageBaseLocation::accept(ASTVisitor& _visitor)
 {
 	if (_visitor.visit(*this))
-			m_storageBaseLocationExpression->accept(_visitor);
+			m_expression->accept(_visitor);
 
 	_visitor.endVisit(*this);
 }
@@ -1172,7 +1174,7 @@ void StorageBaseLocation::accept(ASTVisitor& _visitor)
 void StorageBaseLocation::accept(ASTConstVisitor& _visitor) const
 {
 	if (_visitor.visit(*this))
-			m_storageBaseLocationExpression->accept(_visitor);
+			m_expression->accept(_visitor);
 
 	_visitor.endVisit(*this);
 }

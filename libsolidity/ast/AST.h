@@ -509,14 +509,16 @@ public:
 		std::vector<ASTPointer<InheritanceSpecifier>> _baseContracts,
 		std::vector<ASTPointer<ASTNode>> _subNodes,
 		ContractKind _contractKind = ContractKind::Contract,
-		bool _abstract = false
+		bool _abstract = false,
+		ASTPointer<StorageBaseLocation> storageBaseLocation = ASTPointer<StorageBaseLocation>()
 	):
 		Declaration(_id, _location, _name, std::move(_nameLocation)),
 		StructurallyDocumented(_documentation),
 		m_baseContracts(std::move(_baseContracts)),
 		m_subNodes(std::move(_subNodes)),
 		m_contractKind(_contractKind),
-		m_abstract(_abstract)
+		m_abstract(_abstract),
+		m_storageBaseLocation(storageBaseLocation)
 	{}
 
 	void accept(ASTVisitor& _visitor) override;
@@ -586,6 +588,8 @@ public:
 
 	bool abstract() const { return m_abstract; }
 
+	ASTPointer<StorageBaseLocation> storageBaseLocation() { return m_storageBaseLocation; }
+
 	ContractDefinition const* superContract(ContractDefinition const& _mostDerivedContract) const;
 	/// @returns the next constructor in the inheritance hierarchy.
 	FunctionDefinition const* nextConstructor(ContractDefinition const& _mostDerivedContract) const;
@@ -597,6 +601,7 @@ private:
 	std::vector<ASTPointer<ASTNode>> m_subNodes;
 	ContractKind m_contractKind;
 	bool m_abstract{false};
+	ASTPointer<StorageBaseLocation> m_storageBaseLocation;
 
 	util::LazyInit<std::vector<std::pair<util::FixedHash<4>, FunctionTypePointer>>> m_interfaceFunctionList[2];
 	util::LazyInit<std::vector<EventDefinition const*>> m_interfaceEvents;
@@ -613,14 +618,14 @@ public:
 		ASTPointer<Expression> _storageBaseLocationExpression
 	):
 		ASTNode(_id, _location),
-		m_storageBaseLocationExpression(_storageBaseLocationExpression)
+		m_expression(_storageBaseLocationExpression)
 	{}
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 
-	ASTPointer<Expression> storageBaseLocationExpression() { return m_storageBaseLocationExpression; }
+	ASTPointer<Expression> expression() { return m_expression; }
 private:
-	ASTPointer<Expression> m_storageBaseLocationExpression;
+	ASTPointer<Expression> m_expression;
 };
 
 /**
