@@ -1,0 +1,37 @@
+{
+    "errors": [
+        {
+            "component": "general",
+            "errorCode": "6668",
+            "formattedMessage": "ParserError: Base contracts were already defined previously.
+ --> fileA:9:17:
+  |
+9 | contract C is A is B {
+  |                 ^^
+Note: First inheritance definition is here
+ --> fileA:9:15:
+  |
+9 | contract C is A is B {
+  |               ^
+
+",
+            "message": "Base contracts were already defined previously.",
+            "secondarySourceLocations": [
+                {
+                    "end": 105,
+                    "file": "fileA",
+                    "message": "First inheritance definition is here",
+                    "start": 104
+                }
+            ],
+            "severity": "error",
+            "sourceLocation": {
+                "end": 108,
+                "file": "fileA",
+                "start": 106
+            },
+            "type": "ParserError"
+        }
+    ],
+    "sources": {}
+}

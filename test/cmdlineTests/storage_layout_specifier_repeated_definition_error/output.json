@@ -1,0 +1,37 @@
+{
+    "errors": [
+        {
+            "component": "general",
+            "errorCode": "8714",
+            "formattedMessage": "ParserError: Storage base location was already defined previously.
+ --> fileA:5:34:
+  |
+5 | contract C layout at 0x1234 is A layout at 0xABCD {
+  |                                  ^^^^^^
+Note: Another base location was defined here
+ --> fileA:5:12:
+  |
+5 | contract C layout at 0x1234 is A layout at 0xABCD {
+  |            ^^^^^^^^^^^^^^^^
+
+",
+            "message": "Storage base location was already defined previously.",
+            "secondarySourceLocations": [
+                {
+                    "end": 100,
+                    "file": "fileA",
+                    "message": "Another base location was defined here",
+                    "start": 84
+                }
+            ],
+            "severity": "error",
+            "sourceLocation": {
+                "end": 112,
+                "file": "fileA",
+                "start": 106
+            },
+            "type": "ParserError"
+        }
+    ],
+    "sources": {}
+}

@@ -1,0 +1,11 @@
+{
+	"language": "Solidity",
+	"sources": {
+		"fileA": {"urls": ["storage_layout_specifier_repeated_definition_error/in.sol"]}
+	},
+	"settings": {
+		"outputSelection": {
+			"fileA": { "*": ["*"], "": [ "*" ] }
+		}
+	}
+}

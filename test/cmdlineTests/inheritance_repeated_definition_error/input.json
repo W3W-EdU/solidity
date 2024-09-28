@@ -1,0 +1,11 @@
+{
+	"language": "Solidity",
+	"sources": {
+		"fileA": {"urls": ["inheritance_repeated_definition_error/in.sol"]}
+	},
+	"settings": {
+		"outputSelection": {
+			"fileA": { "*": ["*"], "": [ "*" ] }
+		}
+	}
+}
