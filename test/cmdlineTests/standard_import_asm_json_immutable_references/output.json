@@ -4,6 +4,7 @@
             "": {
                 "evm": {
                     "bytecode": {
+                        "assemblyStructure": {},
                         "functionDebugData": {},
                         "linkReferences": {},
                         "object": "<BYTECODE REMOVED>",
