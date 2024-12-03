@@ -1,0 +1,69 @@
+{
+    "errors": [
+        {
+            "component": "general",
+            "errorCode": "8894",
+            "formattedMessage": "TypeError: Storage layout can only be specified in the most derived contract.
+ --> fileA:6:1:
+  |
+6 | contract B is A {
+  | ^ (Relevant source part starts here and spans across multiple lines).
+Note: Storage layout was already specified here.
+ --> fileA:3:12:
+  |
+3 | contract A layout at 0x1234 {
+  |            ^^^^^^^^^^^^^^^^
+
+",
+            "message": "Storage layout can only be specified in the most derived contract.",
+            "secondarySourceLocations": [
+                {
+                    "end": 85,
+                    "file": "fileA",
+                    "message": "Storage layout was already specified here.",
+                    "start": 69
+                }
+            ],
+            "severity": "error",
+            "sourceLocation": {
+                "end": 110,
+                "file": "fileA",
+                "start": 91
+            },
+            "type": "TypeError"
+        },
+        {
+            "component": "general",
+            "errorCode": "8894",
+            "formattedMessage": "TypeError: Storage layout can only be specified in the most derived contract.
+ --> fileA:9:1:
+  |
+9 | contract C layout at 0x1234 is B {
+  | ^ (Relevant source part starts here and spans across multiple lines).
+Note: Storage layout was already specified here.
+ --> fileA:3:12:
+  |
+3 | contract A layout at 0x1234 {
+  |            ^^^^^^^^^^^^^^^^
+
+",
+            "message": "Storage layout can only be specified in the most derived contract.",
+            "secondarySourceLocations": [
+                {
+                    "end": 85,
+                    "file": "fileA",
+                    "message": "Storage layout was already specified here.",
+                    "start": 69
+                }
+            ],
+            "severity": "error",
+            "sourceLocation": {
+                "end": 148,
+                "file": "fileA",
+                "start": 112
+            },
+            "type": "TypeError"
+        }
+    ],
+    "sources": {}
+}

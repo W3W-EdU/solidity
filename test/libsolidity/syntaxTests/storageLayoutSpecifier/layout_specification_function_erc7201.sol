@@ -5,6 +5,6 @@ function erc7201(bytes memory id) pure returns (uint256) {
     );
 }
 contract C layout at erc7201("C") { }
-// ====
-// stopAfter: parsing
 // ----
+// TypeError 1139: (212-224): The storage layout must be specified by an expression that can be evaluated at compilation time.
+// TypeError 6396: (212-224): The storage layout can only be specified by number literals.

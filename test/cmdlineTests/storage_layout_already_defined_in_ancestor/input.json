@@ -1,0 +1,11 @@
+{
+	"language": "Solidity",
+	"sources": {
+		"fileA": {"urls": ["storage_base_location_defined_ancestor/in.sol"]}
+	},
+	"settings": {
+		"outputSelection": {
+			"fileA": { "A": ["*"] }
+		}
+	}
+}
