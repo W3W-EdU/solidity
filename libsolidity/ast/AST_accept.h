@@ -1160,6 +1160,22 @@ void ForAllQuantifier::accept(ASTConstVisitor& _visitor) const
 	}
 	_visitor.endVisit(*this);
 }
+
+void StorageBaseLocation::accept(ASTVisitor& _visitor)
+{
+	if (_visitor.visit(*this))
+			m_storageBaseLocationExpression->accept(_visitor);
+
+	_visitor.endVisit(*this);
+}
+
+void StorageBaseLocation::accept(ASTConstVisitor& _visitor) const
+{
+	if (_visitor.visit(*this))
+			m_storageBaseLocationExpression->accept(_visitor);
+
+	_visitor.endVisit(*this);
+}
 /// @}
 
 }

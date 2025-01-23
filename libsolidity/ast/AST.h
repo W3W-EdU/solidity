@@ -603,6 +603,26 @@ private:
 	util::LazyInit<std::multimap<std::string, FunctionDefinition const*>> m_definedFunctionsByName;
 };
 
+
+class StorageBaseLocation : public ASTNode
+{
+public:
+	StorageBaseLocation(
+		int64_t _id,
+		SourceLocation const& _location,
+		ASTPointer<Expression> _storageBaseLocationExpression
+	):
+		ASTNode(_id, _location),
+		m_storageBaseLocationExpression(_storageBaseLocationExpression)
+	{}
+	void accept(ASTVisitor& _visitor) override;
+	void accept(ASTConstVisitor& _visitor) const override;
+
+	ASTPointer<Expression> storageBaseLocationExpression() { return m_storageBaseLocationExpression; }
+private:
+	ASTPointer<Expression> m_storageBaseLocationExpression;
+};
+
 /**
  * A sequence of identifiers separated by dots used outside the expression context. Inside the expression context, this is a sequence of Identifier and MemberAccess.
  */
