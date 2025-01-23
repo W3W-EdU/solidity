@@ -588,7 +588,7 @@ public:
 
 	bool abstract() const { return m_abstract; }
 
-	ASTPointer<StorageBaseLocation> storageBaseLocation() { return m_storageBaseLocation; }
+	ASTPointer<StorageBaseLocation> storageBaseLocation() const { return m_storageBaseLocation; }
 
 	ContractDefinition const* superContract(ContractDefinition const& _mostDerivedContract) const;
 	/// @returns the next constructor in the inheritance hierarchy.
@@ -623,7 +623,7 @@ public:
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 
-	ASTPointer<Expression> expression() { return m_expression; }
+	ASTPointer<Expression> expression() const { return m_expression; }
 private:
 	ASTPointer<Expression> m_expression;
 };

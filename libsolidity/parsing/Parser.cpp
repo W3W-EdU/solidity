@@ -374,8 +374,6 @@ ASTPointer<StorageBaseLocation> Parser::parseContractStorageBaseLocation()
 {
 	RecursionGuard recursionGuard(*this);
 	ASTNodeFactory nodeFactory(*this);
-	// solAssert(m_scanner->currentLiteral() == "layout");
-	// expectToken(Token::Identifier);
 	solAssert(*expectIdentifierToken() == "layout");
 	if (
 		m_scanner->currentToken() != Token::Identifier ||

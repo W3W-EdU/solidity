@@ -37,6 +37,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include <range/v3/algorithm/find_if.hpp>
+
 namespace solidity::frontend
 {
 
@@ -50,6 +52,7 @@ ASTPointer<T> ASTJsonImporter::nullOrCast(Json const& _json)
 	else
 		return std::dynamic_pointer_cast<T>(convertJsonToASTNode(_json));
 }
+
 
 
 // ============ public ===========================
@@ -255,6 +258,8 @@ ASTPointer<ASTNode> ASTJsonImporter::convertJsonToASTNode(Json const& _json)
 		return createLiteral(_json);
 	if (nodeType == "StructuredDocumentation")
 		return createDocumentation(_json);
+	if (nodeType == "StorageBaseLocation")
+		return createStorageBaseLocation(_json);
 	else
 		astAssert(false, "Unknown type of ASTNode: " + nodeType);
 
@@ -348,7 +353,17 @@ ASTPointer<ContractDefinition> ASTJsonImporter::createContractDefinition(Json co
 		baseContracts,
 		subNodes,
 		contractKind(_node),
-		memberAsBool(_node, "abstract")
+		memberAsBool(_node, "abstract"),
+		nullOrCast<StorageBaseLocation>(member(_node, "storageBaseLocation"))
+	);
+}
+
+ASTPointer<StorageBaseLocation> ASTJsonImporter::createStorageBaseLocation(Json const& _node)
+{
+	astAssert(_node.contains("expression"));
+	return createASTNode<StorageBaseLocation>(
+		_node,
+		std::dynamic_pointer_cast<Expression>(convertJsonToASTNode(_node["expression"]))
 	);
 }
 
