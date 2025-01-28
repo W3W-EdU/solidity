@@ -131,7 +131,7 @@ private:
 	ASTPointer<ElementaryTypeNameExpression> createElementaryTypeNameExpression(Json const& _node);
 	ASTPointer<ASTNode> createLiteral(Json const& _node);
 	ASTPointer<StructuredDocumentation> createDocumentation(Json const& _node);
-	ASTPointer<StorageBaseLocation> createStorageBaseLocation(Json const& _node);
+	ASTPointer<StorageLayoutSpecifier> createStorageLayoutSpecifier(Json const& _node);
 	///@}
 
 	// =============== general helper functions ===================

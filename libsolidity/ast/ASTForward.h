@@ -98,7 +98,7 @@ class Identifier;
 class ElementaryTypeNameExpression;
 class Literal;
 class StructuredDocumentation;
-class StorageBaseLocation;
+class StorageLayoutSpecifier;
 
 /// Experimental Solidity nodes
 /// @{

@@ -258,8 +258,8 @@ ASTPointer<ASTNode> ASTJsonImporter::convertJsonToASTNode(Json const& _json)
 		return createLiteral(_json);
 	if (nodeType == "StructuredDocumentation")
 		return createDocumentation(_json);
-	if (nodeType == "StorageBaseLocation")
-		return createStorageBaseLocation(_json);
+	if (nodeType == "StorageLayoutSpecifier")
+		return createStorageLayoutSpecifier(_json);
 	else
 		astAssert(false, "Unknown type of ASTNode: " + nodeType);
 
@@ -354,14 +354,14 @@ ASTPointer<ContractDefinition> ASTJsonImporter::createContractDefinition(Json co
 		subNodes,
 		contractKind(_node),
 		memberAsBool(_node, "abstract"),
-		nullOrCast<StorageBaseLocation>(member(_node, "storageBaseLocation"))
+		nullOrCast<StorageLayoutSpecifier>(member(_node, "storageLayoutSpecifier"))
 	);
 }
 
-ASTPointer<StorageBaseLocation> ASTJsonImporter::createStorageBaseLocation(Json const& _node)
+ASTPointer<StorageLayoutSpecifier> ASTJsonImporter::createStorageLayoutSpecifier(Json const& _node)
 {
 	astAssert(_node.contains("expression"));
-	return createASTNode<StorageBaseLocation>(
+	return createASTNode<StorageLayoutSpecifier>(
 		_node,
 		std::dynamic_pointer_cast<Expression>(convertJsonToASTNode(_node["expression"]))
 	);

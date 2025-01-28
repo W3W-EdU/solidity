@@ -172,7 +172,7 @@ private:
 	FunctionCallArguments parseNamedArguments();
 	std::pair<ASTPointer<ASTString>, langutil::SourceLocation> expectIdentifierWithLocation();
 
-	ASTPointer<StorageBaseLocation> parseContractStorageBaseLocation();
+	ASTPointer<StorageLayoutSpecifier> parseStorageLayoutSpecifier();
 	///@}
 
 	///@{

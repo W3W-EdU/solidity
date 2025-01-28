@@ -109,7 +109,7 @@ public:
 	virtual bool visit(ElementaryTypeNameExpression& _node) { return visitNode(_node); }
 	virtual bool visit(Literal& _node) { return visitNode(_node); }
 	virtual bool visit(StructuredDocumentation& _node) { return visitNode(_node); }
-	virtual bool visit(StorageBaseLocation& _node) { return visitNode(_node); }
+	virtual bool visit(StorageLayoutSpecifier& _node) { return visitNode(_node); }
 	/// Experimental Solidity nodes
 	/// @{
 	virtual bool visit(TypeClassDefinition& _node) { return visitNode(_node); }
@@ -175,7 +175,7 @@ public:
 	virtual void endVisit(ElementaryTypeNameExpression& _node) { endVisitNode(_node); }
 	virtual void endVisit(Literal& _node) { endVisitNode(_node); }
 	virtual void endVisit(StructuredDocumentation& _node) { endVisitNode(_node); }
-	virtual void endVisit(StorageBaseLocation& _node) { endVisitNode(_node); }
+	virtual void endVisit(StorageLayoutSpecifier& _node) { endVisitNode(_node); }
 	/// Experimental Solidity nodes
 	/// @{
 	virtual void endVisit(TypeClassDefinition& _node) { endVisitNode(_node); }
@@ -263,7 +263,7 @@ public:
 	virtual bool visit(ElementaryTypeNameExpression const& _node) { return visitNode(_node); }
 	virtual bool visit(Literal const& _node) { return visitNode(_node); }
 	virtual bool visit(StructuredDocumentation const& _node) { return visitNode(_node); }
-	virtual bool visit(StorageBaseLocation const& _node) { return visitNode(_node); }
+	virtual bool visit(StorageLayoutSpecifier const& _node) { return visitNode(_node); }
 	/// Experimental Solidity nodes
 	/// @{
 	virtual bool visit(TypeClassDefinition const& _node) { return visitNode(_node); }
@@ -329,7 +329,7 @@ public:
 	virtual void endVisit(ElementaryTypeNameExpression const& _node) { endVisitNode(_node); }
 	virtual void endVisit(Literal const& _node) { endVisitNode(_node); }
 	virtual void endVisit(StructuredDocumentation const& _node) { endVisitNode(_node); }
-	virtual void endVisit(StorageBaseLocation const& _node) { endVisitNode(_node); }
+	virtual void endVisit(StorageLayoutSpecifier const& _node) { endVisitNode(_node); }
 	/// Experimental Solidity nodes
 	/// @{
 	virtual void endVisit(TypeClassDefinition const& _node) { endVisitNode(_node); }

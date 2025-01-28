@@ -370,7 +370,7 @@ std::pair<ContractKind, bool> Parser::parseContractKind()
 	return std::make_pair(kind, abstract);
 }
 
-ASTPointer<StorageBaseLocation> Parser::parseContractStorageBaseLocation()
+ASTPointer<StorageLayoutSpecifier> Parser::parseStorageLayoutSpecifier()
 {
 	RecursionGuard recursionGuard(*this);
 	ASTNodeFactory nodeFactory(*this);
@@ -387,7 +387,7 @@ ASTPointer<StorageBaseLocation> Parser::parseContractStorageBaseLocation()
 
 	advance();
 	nodeFactory.markEndPosition();
-	return nodeFactory.createNode<StorageBaseLocation>(
+	return nodeFactory.createNode<StorageLayoutSpecifier>(
 		parseExpression()
 	);
 }
@@ -402,7 +402,7 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 	std::vector<ASTPointer<InheritanceSpecifier>> baseContracts;
 	std::vector<ASTPointer<ASTNode>> subNodes;
 	std::pair<ContractKind, bool> contractKind{};
-	ASTPointer<StorageBaseLocation> storageBaseLocation;
+	ASTPointer<StorageLayoutSpecifier> storageLayoutSpecifier;
 	documentation = parseStructuredDocumentation();
 	contractKind = parseContractKind();
 	std::tie(name, nameLocation) = expectIdentifierWithLocation();
@@ -429,15 +429,15 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 			m_scanner->currentLiteral() == "layout"
 		)
 		{
-			if (storageBaseLocation)
+			if (storageLayoutSpecifier)
 				m_errorReporter.parserError(
 					8714_error,
 					m_scanner->currentLocation(),
-					SecondarySourceLocation().append("Another base location was defined here", storageBaseLocation->location()),
+					SecondarySourceLocation().append("Another base location was defined here", storageLayoutSpecifier->location()),
 					"Storage base location was already defined previously."
 				);
 
-			storageBaseLocation = parseContractStorageBaseLocation();
+			storageLayoutSpecifier = parseStorageLayoutSpecifier();
 		}
 		else
 			break;
@@ -496,7 +496,7 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 		subNodes,
 		contractKind.first,
 		contractKind.second,
-		storageBaseLocation
+		storageLayoutSpecifier
 	);
 }
 

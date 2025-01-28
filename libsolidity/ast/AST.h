@@ -510,7 +510,7 @@ public:
 		std::vector<ASTPointer<ASTNode>> _subNodes,
 		ContractKind _contractKind = ContractKind::Contract,
 		bool _abstract = false,
-		ASTPointer<StorageBaseLocation> storageBaseLocation = ASTPointer<StorageBaseLocation>()
+		ASTPointer<StorageLayoutSpecifier> _storageLayoutSpecifier = ASTPointer<StorageLayoutSpecifier>()
 	):
 		Declaration(_id, _location, _name, std::move(_nameLocation)),
 		StructurallyDocumented(_documentation),
@@ -518,7 +518,7 @@ public:
 		m_subNodes(std::move(_subNodes)),
 		m_contractKind(_contractKind),
 		m_abstract(_abstract),
-		m_storageBaseLocation(storageBaseLocation)
+		m_storageLayoutSpecifier(_storageLayoutSpecifier)
 	{}
 
 	void accept(ASTVisitor& _visitor) override;
@@ -588,7 +588,7 @@ public:
 
 	bool abstract() const { return m_abstract; }
 
-	ASTPointer<StorageBaseLocation> storageBaseLocation() const { return m_storageBaseLocation; }
+	ASTPointer<StorageLayoutSpecifier> storageLayoutSpecifier() const { return m_storageLayoutSpecifier; }
 
 	ContractDefinition const* superContract(ContractDefinition const& _mostDerivedContract) const;
 	/// @returns the next constructor in the inheritance hierarchy.
@@ -601,7 +601,7 @@ private:
 	std::vector<ASTPointer<ASTNode>> m_subNodes;
 	ContractKind m_contractKind;
 	bool m_abstract{false};
-	ASTPointer<StorageBaseLocation> m_storageBaseLocation;
+	ASTPointer<StorageLayoutSpecifier> m_storageLayoutSpecifier;
 
 	util::LazyInit<std::vector<std::pair<util::FixedHash<4>, FunctionTypePointer>>> m_interfaceFunctionList[2];
 	util::LazyInit<std::vector<EventDefinition const*>> m_interfaceEvents;
@@ -609,21 +609,21 @@ private:
 };
 
 
-class StorageBaseLocation : public ASTNode
+class StorageLayoutSpecifier : public ASTNode
 {
 public:
-	StorageBaseLocation(
+	StorageLayoutSpecifier(
 		int64_t _id,
 		SourceLocation const& _location,
-		ASTPointer<Expression> _storageBaseLocationExpression
+		ASTPointer<Expression> _expression
 	):
 		ASTNode(_id, _location),
-		m_expression(_storageBaseLocationExpression)
+		m_expression(_expression)
 	{}
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 
-	ASTPointer<Expression> expression() const { return m_expression; }
+	ASTPointer<Expression const> expression() const { return m_expression; }
 private:
 	ASTPointer<Expression> m_expression;
 };
