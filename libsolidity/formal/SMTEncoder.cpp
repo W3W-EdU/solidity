@@ -2771,7 +2771,7 @@ TypePointers SMTEncoder::replaceUserTypes(TypePointers const& _types)
 
 std::pair<Expression const*, FunctionCallOptions const*> SMTEncoder::functionCallExpression(FunctionCall const& _funCall)
 {
-	Expression const* callExpr = &_funCall.expression();
+	Expression const* callExpr = innermostTuple(_funCall.expression());
 	auto const* callOptions = dynamic_cast<FunctionCallOptions const*>(callExpr);
 	if (callOptions)
 		callExpr = &callOptions->expression();
