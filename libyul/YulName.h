@@ -18,9 +18,15 @@
 
 #pragma once
 
-#include <libyul/YulString.h>
+#include <libyul/ASTNodeRegistry.h>
+
+#include <map>
+#include <optional>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace solidity::yul
 {
-using YulName = YulString;
+using YulName = ASTNodeRegistry::NodeId;
 }

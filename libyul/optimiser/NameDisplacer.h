@@ -22,7 +22,7 @@
 #pragma once
 
 #include <libyul/optimiser/ASTWalker.h>
-#include <libyul/optimiser/NameDispenser.h>
+#include <libyul/optimiser/NodeIdDispenser.h>
 
 #include <set>
 #include <map>
@@ -43,15 +43,12 @@ class NameDisplacer: public ASTModifier
 {
 public:
 	explicit NameDisplacer(
-		NameDispenser& _dispenser,
+		NodeIdDispenser& _dispenser,
 		std::set<YulName> const& _namesToFree
 	):
 		m_nameDispenser(_dispenser),
 		m_namesToFree(_namesToFree)
-	{
-		for (YulName n: _namesToFree)
-			m_nameDispenser.markUsed(n);
-	}
+	{}
 
 	using ASTModifier::operator();
 	void operator()(Identifier& _identifier) override;
@@ -68,7 +65,7 @@ protected:
 	/// Replace the identifier @a _name if it is in the translation map.
 	void checkAndReplace(YulName& _name) const;
 
-	NameDispenser& m_nameDispenser;
+	NodeIdDispenser& m_nameDispenser;
 	std::set<YulName> const& m_namesToFree;
 	std::map<YulName, YulName> m_translations;
 };

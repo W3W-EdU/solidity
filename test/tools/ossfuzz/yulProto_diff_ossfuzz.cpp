@@ -58,8 +58,6 @@ DEFINE_PROTO_FUZZER(Program const& _input)
 		of.write(yul_source.data(), static_cast<std::streamsize>(yul_source.size()));
 	}
 
-	YulStringRepository::reset();
-
 	// YulStack entry point
 	YulStack stack(
 		version,
@@ -90,8 +88,7 @@ DEFINE_PROTO_FUZZER(Program const& _input)
 	// TODO: Add EOF support
 	yulFuzzerUtil::TerminationReason termReason = yulFuzzerUtil::interpret(
 		os1,
-		stack.parserResult()->code()->root(),
-		EVMDialect::strictAssemblyForEVMObjects(version, std::nullopt),
+		*stack.parserResult()->code(),
 		/*disableMemoryTracing=*/true
 	);
 
@@ -106,8 +103,7 @@ DEFINE_PROTO_FUZZER(Program const& _input)
 	// TODO: Add EOF support
 	termReason = yulFuzzerUtil::interpret(
 		os2,
-		*astRoot,
-		EVMDialect::strictAssemblyForEVMObjects(version, std::nullopt),
+		*optimizerTest.optimizedObject()->code(),
 		true
 	);
 	if (yulFuzzerUtil::resourceLimitsExceeded(termReason))

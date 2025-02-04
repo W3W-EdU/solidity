@@ -28,6 +28,7 @@
 #include <libyul/optimiser/BlockHasher.h>
 
 #include <set>
+#include <unordered_map>
 
 namespace solidity::yul
 {

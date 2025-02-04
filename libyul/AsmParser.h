@@ -162,6 +162,7 @@ protected:
 
 private:
 	Dialect const& m_dialect;
+	ASTNodeRegistryBuilder m_astNodeLabelRegistryBuilder;
 
 	std::optional<std::map<unsigned, std::shared_ptr<std::string const>>> m_sourceNames;
 	langutil::SourceLocation m_locationOverride;

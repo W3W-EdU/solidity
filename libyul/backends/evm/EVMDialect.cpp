@@ -286,16 +286,16 @@ std::vector<std::optional<BuiltinFunctionForEVM>> createBuiltins(langutil::EVMVe
 			yulAssert(_context.currentObject, "No object available.");
 			yulAssert(_call.arguments.size() == 1, "");
 			Expression const& arg = _call.arguments.front();
-			YulName const dataName (formatLiteral(std::get<Literal>(arg)));
-			if (_context.currentObject->name == dataName.str())
+			std::string const dataName = formatLiteral(std::get<Literal>(arg));
+			if (_context.currentObject->name == dataName)
 				_assembly.appendAssemblySize();
 			else
 			{
 			std::vector<size_t> subIdPath =
-					_context.subIDs.count(dataName.str()) == 0 ?
-						_context.currentObject->pathToSubObject(dataName.str()) :
-						std::vector<size_t>{_context.subIDs.at(dataName.str())};
-				yulAssert(!subIdPath.empty(), "Could not find assembly object <" + dataName.str() + ">.");
+					_context.subIDs.count(dataName) == 0 ?
+						_context.currentObject->pathToSubObject(dataName) :
+						std::vector<size_t>{_context.subIDs.at(dataName)};
+				yulAssert(!subIdPath.empty(), "Could not find assembly object <" + dataName + ">.");
 				_assembly.appendDataSize(subIdPath);
 			}
 		}));
@@ -307,16 +307,16 @@ std::vector<std::optional<BuiltinFunctionForEVM>> createBuiltins(langutil::EVMVe
 			yulAssert(_context.currentObject, "No object available.");
 			yulAssert(_call.arguments.size() == 1, "");
 			Expression const& arg = _call.arguments.front();
-			YulName const dataName (formatLiteral(std::get<Literal>(arg)));
-			if (_context.currentObject->name == dataName.str())
+			std::string const dataName = formatLiteral(std::get<Literal>(arg));
+			if (_context.currentObject->name == dataName)
 				_assembly.appendConstant(0);
 			else
 			{
 			std::vector<size_t> subIdPath =
-					_context.subIDs.count(dataName.str()) == 0 ?
-						_context.currentObject->pathToSubObject(dataName.str()) :
-						std::vector<size_t>{_context.subIDs.at(dataName.str())};
-				yulAssert(!subIdPath.empty(), "Could not find assembly object <" + dataName.str() + ">.");
+					_context.subIDs.count(dataName) == 0 ?
+						_context.currentObject->pathToSubObject(dataName) :
+						std::vector<size_t>{_context.subIDs.at(dataName)};
+				yulAssert(!subIdPath.empty(), "Could not find assembly object <" + dataName + ">.");
 				_assembly.appendDataOffset(subIdPath);
 			}
 		}));
@@ -545,7 +545,6 @@ bool EVMDialect::reservedIdentifier(std::string_view _name) const
 EVMDialect const& EVMDialect::strictAssemblyForEVM(langutil::EVMVersion _evmVersion, std::optional<uint8_t> _eofVersion)
 {
 	static std::map<std::pair<langutil::EVMVersion, std::optional<uint8_t>>, std::unique_ptr<EVMDialect const>> dialects;
-	static YulStringRepository::ResetCallback callback{[&] { dialects.clear(); }};
 	if (!dialects[{_evmVersion, _eofVersion}])
 		dialects[{_evmVersion, _eofVersion}] = std::make_unique<EVMDialect>(_evmVersion, _eofVersion, false);
 	return *dialects[{_evmVersion, _eofVersion}];
@@ -554,7 +553,6 @@ EVMDialect const& EVMDialect::strictAssemblyForEVM(langutil::EVMVersion _evmVers
 EVMDialect const& EVMDialect::strictAssemblyForEVMObjects(langutil::EVMVersion _evmVersion, std::optional<uint8_t> _eofVersion)
 {
 	static std::map<std::pair<langutil::EVMVersion, std::optional<uint8_t>>, std::unique_ptr<EVMDialect const>> dialects;
-	static YulStringRepository::ResetCallback callback{[&] { dialects.clear(); }};
 	if (!dialects[{_evmVersion, _eofVersion}])
 		dialects[{_evmVersion, _eofVersion}] = std::make_unique<EVMDialect>(_evmVersion, _eofVersion, true);
 	return *dialects[{_evmVersion, _eofVersion}];

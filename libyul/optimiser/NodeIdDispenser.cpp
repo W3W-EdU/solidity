@@ -23,9 +23,6 @@
 
 #include <fmt/compile.h>
 
-#include <range/v3/range/conversion.hpp>
-#include <range/v3/view/iota.hpp>
-
 using namespace solidity::yul;
 
 namespace
@@ -67,10 +64,13 @@ NodeIdDispenser::NodeId NodeIdDispenser::resolveBaseId(NodeId _id) const
 	return _id;
 }
 
-ASTNodeRegistry NodeIdDispenser::generateNewLabels(Block const&, Dialect const& _dialect) const
+ASTNodeRegistry NodeIdDispenser::generateNewLabels(Block const& _root, Dialect const& _dialect) const
 {
-	// this can be replaced by the actually used ids in the provided block once the AST uses ids instead of YulString
-	std::set<NodeId> usedIds = ranges::views::iota(static_cast<size_t>(0), m_mapping.size() + m_offset) | ranges::to<std::set<NodeId>>;
+	std::set<NodeId> usedIds = NameCollector(_root).names();
+	// add ghosts to usedIds as they're not referenced in the regular ast
+	for (size_t i = 0; i < m_mapping.size(); ++i)
+		if (m_mapping[i] == ASTNodeRegistry::ghostId())
+			usedIds.insert(i + m_offset);
 
 	if (usedIds.empty())
 		return {};

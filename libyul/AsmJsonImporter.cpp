@@ -35,6 +35,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include <fmt/format.h>
+
 #include <vector>
 
 using namespace solidity::langutil;
@@ -80,8 +82,7 @@ Json AsmJsonImporter::member(Json const& _node, std::string const& _name)
 NameWithDebugData AsmJsonImporter::createNameWithDebugData(Json const& _node)
 {
 	auto nameWithDebugData = createAsmNode<NameWithDebugData>(_node);
-	nameWithDebugData.name = YulName{member(_node, "name").get<std::string>()};
-	std::ignore = m_nodeRegistryBuilder.define(nameWithDebugData.name.str());
+	nameWithDebugData.name = m_nodeRegistryBuilder.define(member(_node, "name").get<std::string>());
 	return nameWithDebugData;
 }
 
@@ -236,8 +237,7 @@ Leave AsmJsonImporter::createLeave(Json const& _node)
 Identifier AsmJsonImporter::createIdentifier(Json const& _node)
 {
 	auto identifier = createAsmNode<Identifier>(_node);
-	identifier.name = YulName(member(_node, "name").get<std::string>());
-	std::ignore = m_nodeRegistryBuilder.define(identifier.name.str());
+	identifier.name = m_nodeRegistryBuilder.define(member(_node, "name").get<std::string>());
 	return identifier;
 }
 
@@ -296,8 +296,7 @@ VariableDeclaration AsmJsonImporter::createVariableDeclaration(Json const& _node
 FunctionDefinition AsmJsonImporter::createFunctionDefinition(Json const& _node)
 {
 	auto funcDef = createAsmNode<FunctionDefinition>(_node);
-	funcDef.name = YulName{member(_node, "name").get<std::string>()};
-	std::ignore = m_nodeRegistryBuilder.define(funcDef.name.str());
+	funcDef.name = m_nodeRegistryBuilder.define(member(_node, "name").get<std::string>());
 
 	if (_node.contains("parameters"))
 		for (auto const& var: member(_node, "parameters"))

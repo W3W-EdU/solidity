@@ -39,6 +39,7 @@ namespace solidity::yul
 {
 
 class Dialect;
+class NodeIdDispenser;
 
 struct NameWithDebugData { langutil::DebugData::ConstPtr debugData; YulName name; };
 using NameWithDebugDataList = std::vector<NameWithDebugData>;
@@ -114,12 +115,17 @@ public:
 		m_dialect(_dialect),
 		m_labels(std::move(_labels)),
 		m_root(std::move(_root))
-	{}
+	{
+		assertLabelCompatibility();
+	}
+	AST(Dialect const& _dialect, NodeIdDispenser const& _nameDispenser, Block _root);
 
 	Dialect const& dialect() const { return m_dialect; }
 	Block const& root() const { return m_root; }
 	ASTNodeRegistry const& labels() const { return m_labels; }
 private:
+	void assertLabelCompatibility() const;
+
 	Dialect const& m_dialect;
 	ASTNodeRegistry m_labels;
 	Block m_root;

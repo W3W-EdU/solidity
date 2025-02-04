@@ -85,12 +85,12 @@ private:
 	 */
 	struct VariableOffset
 	{
-		YulName reference;
+		YulName reference{};
 		u256 offset;
 
 		bool isAbsolute() const
 		{
-			return reference.empty();
+			return reference == ASTNodeRegistry::emptyId();
 		}
 
 		std::optional<u256> absoluteValue() const
