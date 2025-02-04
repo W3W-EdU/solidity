@@ -433,8 +433,8 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 				m_errorReporter.parserError(
 					8714_error,
 					m_scanner->currentLocation(),
-					SecondarySourceLocation().append("Another base location was defined here", storageLayoutSpecifier->location()),
-					"Storage base location was already defined previously."
+					SecondarySourceLocation().append("Another storage layout was defined here", storageLayoutSpecifier->location()),
+					"Storage layout was already defined previously."
 				);
 
 			storageLayoutSpecifier = parseStorageLayoutSpecifier();
