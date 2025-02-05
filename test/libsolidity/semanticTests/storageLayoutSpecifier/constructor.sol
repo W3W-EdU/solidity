@@ -15,6 +15,8 @@ contract C layout at 7 {
 // compileViaYul: true
 // ----
 // constructor(): 1, 2, 3
+// gas irOptimized: 104178
+// gas irOptimized code: 30000
 // x() -> 2
 // y() -> 4
 // z() -> 6
