@@ -133,20 +133,26 @@ protected:
 		return r;
 	}
 
-	Block parseBlock();
-	Statement parseStatement();
-	Case parseCase();
-	ForLoop parseForLoop();
+	Block parseBlock(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	Statement parseStatement(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	Case parseCase(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	ForLoop parseForLoop(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
 	/// Parses a functional expression that has to push exactly one stack element
-	Expression parseExpression(bool _unlimitedLiteralArgument = false);
+	Expression parseExpression(ASTNodeRegistryBuilder& _nodeRegistryBuilder, bool _unlimitedLiteralArgument = false);
 	/// Parses an elementary operation, i.e. a literal, identifier, instruction or
 	/// builtin function call (only the name).
-	std::variant<Literal, Identifier, BuiltinName> parseLiteralOrIdentifier(bool _unlimitedLiteralArgument = false);
-	VariableDeclaration parseVariableDeclaration();
-	FunctionDefinition parseFunctionDefinition();
-	FunctionCall parseCall(std::variant<Literal, Identifier, BuiltinName>&& _index);
-	NameWithDebugData parseNameWithDebugData();
-	YulName expectAsmIdentifier();
+	std::variant<Literal, Identifier, BuiltinName> parseLiteralOrIdentifier(
+		ASTNodeRegistryBuilder& _nodeRegistryBuilder,
+		bool _unlimitedLiteralArgument = false
+	);
+	VariableDeclaration parseVariableDeclaration(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	FunctionDefinition parseFunctionDefinition(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	FunctionCall parseCall(
+		ASTNodeRegistryBuilder& _nodeRegistryBuilder,
+		std::variant<Literal, Identifier, BuiltinName>&& _index
+	);
+	NameWithDebugData parseNameWithDebugData(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
+	YulName expectAsmIdentifier(ASTNodeRegistryBuilder& _nodeRegistryBuilder);
 	void raiseUnsupportedTypesError(langutil::SourceLocation const& _location) const;
 
 	/// Reports an error if we are currently not inside the body part of a for loop.
