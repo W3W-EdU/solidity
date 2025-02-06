@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.27;
+pragma solidity >=0.0;
 contract B layout at 1024 {
     bool b;
     address a;

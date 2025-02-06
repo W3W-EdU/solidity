@@ -8,7 +8,7 @@ contract C layout at 42 {
     }
 }
 // ====
-// EVMVersion: >=cancun
+// EVMVersion: >=prague
 // compileViaYul: true
 // ----
 // f() -> 0x10

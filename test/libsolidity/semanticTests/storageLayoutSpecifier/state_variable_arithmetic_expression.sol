@@ -12,7 +12,7 @@ contract C layout at 7 {
     }
 }
 // ====
-// EVMVersion: >=cancun
+// EVMVersion: >=prague
 // compileViaYul: true
 // ----
 // f(uint256): 2 -> 0

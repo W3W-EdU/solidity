@@ -4,7 +4,7 @@ contract C layout at 7 {
     uint32 public z = 3;
 }
 // ====
-// EVMVersion: >=cancun
+// EVMVersion: >=prague
 // compileViaYul: true
 // ----
 // x() -> 1

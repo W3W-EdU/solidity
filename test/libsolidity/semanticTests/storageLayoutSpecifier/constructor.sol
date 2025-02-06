@@ -11,7 +11,7 @@ contract C layout at 7 {
 
 }
 // ====
-// EVMVersion: >=cancun
+// EVMVersion: >=prague
 // compileViaYul: true
 // ----
 // constructor(): 1, 2, 3
