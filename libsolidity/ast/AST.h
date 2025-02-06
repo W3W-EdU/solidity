@@ -623,7 +623,9 @@ public:
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 
-	ASTPointer<Expression const> expression() const { return m_expression; }
+	StorageLayoutSpecifierAnnotation& annotation() const override;
+
+	ASTPointer<Expression> expression() const { return m_expression; }
 private:
 	ASTPointer<Expression> m_expression;
 };

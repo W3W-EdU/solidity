@@ -371,6 +371,10 @@ std::multimap<std::string, FunctionDefinition const*> const& ContractDefinition:
 	});
 }
 
+StorageLayoutSpecifierAnnotation& StorageLayoutSpecifier::annotation() const
+{
+	return initAnnotation<StorageLayoutSpecifierAnnotation>();
+}
 
 TypeNameAnnotation& TypeName::annotation() const
 {

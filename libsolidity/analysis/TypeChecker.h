@@ -158,6 +158,8 @@ private:
 	void endVisit(ElementaryTypeNameExpression const& _expr) override;
 	void endVisit(Literal const& _literal) override;
 	void endVisit(UsingForDirective const& _usingForDirective) override;
+	void endVisit(ContractDefinition const& _contract) override;
+	void endVisit(StorageLayoutSpecifier const& _storageLayoutSpecifier) override;
 
 	void checkErrorAndEventParameters(CallableDeclaration const& _callable);
 

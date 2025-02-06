@@ -22,6 +22,7 @@
  */
 
 #include <libsolidity/analysis/TypeChecker.h>
+#include <libsolidity/analysis/ConstantEvaluator.h>
 #include <libsolidity/ast/AST.h>
 #include <libsolidity/ast/ASTUtils.h>
 #include <libsolidity/ast/UserDefinableOperators.h>
@@ -46,6 +47,7 @@
 #include <range/v3/algorithm/count_if.hpp>
 #include <range/v3/view/drop_exactly.hpp>
 #include <range/v3/view/enumerate.hpp>
+#include <range/v3/view/reverse.hpp>
 #include <range/v3/view/zip.hpp>
 
 #include <memory>
@@ -232,6 +234,99 @@ TypePointers TypeChecker::typeCheckMetaTypeFunctionAndRetrieveReturnType(Functio
 bool TypeChecker::visit(ImportDirective const&)
 {
 	return false;
+}
+
+void TypeChecker::endVisit(ContractDefinition const& _contract)
+{
+	if ((_contract.isLibrary() || _contract.abstract()) && _contract.storageLayoutSpecifier())
+	m_errorReporter.typeError(
+		7587_error,
+		_contract.storageLayoutSpecifier()->location(),
+		"Storage layout cannot be specified for abstract contracts or libraries"
+	);
+
+	for (auto const* ancestorContract: _contract.annotation().linearizedBaseContracts | ranges::views::reverse)
+	{
+		if (*ancestorContract == _contract)
+			continue;
+		if (ancestorContract->storageLayoutSpecifier())
+			m_errorReporter.typeError(
+				8894_error,
+				_contract.location(),
+				SecondarySourceLocation().append(
+					"Storage layout was already specified here.",
+					ancestorContract->storageLayoutSpecifier()->location()
+				),
+				"Storage layout can only be specified in the most derived contract."
+			);
+
+		if (
+			auto derivedContract = ancestorContract->annotation().derivedContractSpecifyingStorageLayout;
+			derivedContract && _contract.storageLayoutSpecifier()
+		)
+			m_errorReporter.typeError(
+				2031_error,
+				_contract.location(),
+				SecondarySourceLocation().append(
+					"Storage layout was also specified by another derived contract here.",
+					derivedContract->location()
+				),
+				"Conflicting storage layout specifications:"
+				"Storage layout for base contract \'" + ancestorContract->name() + "\' was also specified by another contract which derives from it."
+			);
+
+		if (_contract.storageLayoutSpecifier() && !m_errorReporter.hasErrors())
+			ancestorContract->annotation().derivedContractSpecifyingStorageLayout = &_contract;
+	}
+}
+
+void TypeChecker::endVisit(StorageLayoutSpecifier const& _storageLayoutSpecifier)
+{
+	ASTPointer<Expression> const baseLocation = _storageLayoutSpecifier.expression();
+
+	if (!*baseLocation->annotation().isPure)
+	{
+		// TODO: introduce and handle erc7201 as a builtin function
+		m_errorReporter.typeError(
+			1139_error,
+			baseLocation->location(),
+			"The storage layout must be specified by an expression that can be evaluated at compilation time."
+		);
+	}
+
+	auto const* expressionType = type(*baseLocation);
+	BoolResult result = expressionType->isImplicitlyConvertibleTo(*TypeProvider::uint256());
+	if (!result)
+	{
+		std::string errorMessage = "Storage layout cannot be specified by ";
+		if (
+			auto const* rationalType = dynamic_cast<RationalNumberType const*>(expressionType);
+			rationalType && rationalType->isFractional()
+		)
+			errorMessage += "a fractional number.";
+		else
+			errorMessage += "a number exceeding the range of type uint256. Current type is " + expressionType->humanReadableName();
+
+		m_errorReporter.typeErrorConcatenateDescriptions(
+			1763_error,
+			baseLocation->location(),
+			errorMessage,
+			result.message()
+		);
+		return;
+	}
+
+	if (auto const* rationalType = dynamic_cast<RationalNumberType const*>(expressionType))
+	{
+		solAssert(!rationalType->isFractional());
+		_storageLayoutSpecifier.annotation().value = u256(rationalType->value().numerator());
+	}
+	else
+		m_errorReporter.typeError(
+			6396_error,
+			baseLocation->location(),
+			"The storage layout can only be specified by number literals."
+		);
 }
 
 void TypeChecker::endVisit(InheritanceSpecifier const& _inheritance)
