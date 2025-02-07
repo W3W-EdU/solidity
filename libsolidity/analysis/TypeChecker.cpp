@@ -239,11 +239,11 @@ bool TypeChecker::visit(ImportDirective const&)
 void TypeChecker::endVisit(ContractDefinition const& _contract)
 {
 	if ((_contract.isLibrary() || _contract.abstract()) && _contract.storageLayoutSpecifier())
-	m_errorReporter.typeError(
-		7587_error,
-		_contract.storageLayoutSpecifier()->location(),
-		"Storage layout cannot be specified for abstract contracts or libraries"
-	);
+		m_errorReporter.typeError(
+			7587_error,
+			_contract.storageLayoutSpecifier()->location(),
+			"Storage layout cannot be specified for abstract contracts or libraries"
+		);
 
 	for (auto const* ancestorContract: _contract.annotation().linearizedBaseContracts | ranges::views::reverse)
 	{
