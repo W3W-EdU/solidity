@@ -159,6 +159,8 @@ add_library(yul
 	optimiser/NameDisplacer.h
 	optimiser/NameSimplifier.cpp
 	optimiser/NameSimplifier.h
+	optimiser/NodeIdDispenser.cpp
+	optimiser/NodeIdDispenser.h
 	optimiser/OptimiserStep.h
 	optimiser/OptimizerUtilities.cpp
 	optimiser/OptimizerUtilities.h
