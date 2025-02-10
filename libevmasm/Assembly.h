@@ -89,6 +89,8 @@ public:
 	AssemblyItem newPushImmutable(std::string const& _identifier);
 	AssemblyItem newImmutableAssignment(std::string const& _identifier);
 	AssemblyItem newAuxDataLoadN(size_t offset);
+	AssemblyItem newSwapN(uint8_t _depth);
+	AssemblyItem newDupN(uint8_t _depth);
 
 	AssemblyItem const& append(AssemblyItem _i);
 	AssemblyItem const& append(bytes const& _data) { return append(newData(_data)); }
@@ -102,6 +104,8 @@ public:
 	void appendImmutable(std::string const& _identifier) { append(newPushImmutable(_identifier)); }
 	void appendImmutableAssignment(std::string const& _identifier) { append(newImmutableAssignment(_identifier)); }
 	void appendAuxDataLoadN(uint16_t _offset) { append(newAuxDataLoadN(_offset));}
+	void appendSwapN(uint8_t _depth) { append(newSwapN(_depth)); }
+	void appendDupN(uint8_t _depth) { append(newDupN(_depth)); }
 
 	void appendVerbatim(bytes _data, size_t _arguments, size_t _returnVariables)
 	{

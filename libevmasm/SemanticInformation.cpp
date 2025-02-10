@@ -312,6 +312,8 @@ bool SemanticInformation::isCommutativeOperation(AssemblyItem const& _item)
 
 bool SemanticInformation::isDupInstruction(AssemblyItem const& _item)
 {
+	if (_item.type() == evmasm::DupN)
+		return true;
 	if (_item.type() != evmasm::Operation)
 		return false;
 	return evmasm::isDupInstruction(_item.instruction());
@@ -319,6 +321,8 @@ bool SemanticInformation::isDupInstruction(AssemblyItem const& _item)
 
 bool SemanticInformation::isSwapInstruction(AssemblyItem const& _item)
 {
+	if (_item.type() == evmasm::SwapN)
+		return true;
 	if (_item.type() != evmasm::Operation)
 		return false;
 	return evmasm::isSwapInstruction(_item.instruction());

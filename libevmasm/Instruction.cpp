@@ -339,6 +339,8 @@ static std::map<Instruction, InstructionInfo> const c_instructionInfo =
 	{Instruction::RETF,           {"RETF",            0,  0,   0,  true,       Tier::RetF}},
 	{Instruction::CALLF,          {"CALLF",           2,  0,   0,  true,       Tier::CallF}},
 	{Instruction::JUMPF,          {"JUMPF",           2,  0,   0,  true,       Tier::JumpF}},
+	{Instruction::SWAPN,          {"SWAPN",           1,  0,   0,  false,      Tier::VeryLow}},
+	{Instruction::DUPN,           {"DUPN",            1,  0,   0,  false,      Tier::VeryLow}},
 	{Instruction::EOFCREATE,      {"EOFCREATE",       1,  4,   1,  true,       Tier::Special}},
 	{Instruction::RETURNCONTRACT, {"RETURNCONTRACT",  1,  2,   0,  true,       Tier::Special}},
 	{Instruction::CREATE,         {"CREATE",          0,  3,   1,  true,       Tier::Special}},

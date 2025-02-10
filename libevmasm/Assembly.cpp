@@ -772,6 +772,16 @@ AssemblyItem Assembly::newAuxDataLoadN(size_t _offset)
 	return AssemblyItem{AuxDataLoadN, _offset};
 }
 
+AssemblyItem Assembly::newSwapN(uint8_t _depth)
+{
+	return AssemblyItem::swapn(_depth);
+}
+
+AssemblyItem Assembly::newDupN(uint8_t _depth)
+{
+	return AssemblyItem::dupn(_depth);
+}
+
 Assembly& Assembly::optimise(OptimiserSettings const& _settings)
 {
 	optimiseInternal(_settings, {});
@@ -1635,6 +1645,16 @@ LinkerObject const& Assembly::assembleEOF() const
 			}
 			case RetF:
 				ret.bytecode.push_back(static_cast<uint8_t>(Instruction::RETF));
+				break;
+			case SwapN:
+				ret.bytecode.push_back(static_cast<uint8_t>(Instruction::SWAPN));
+				solAssert(item.data() < 256);
+				ret.bytecode.push_back(static_cast<uint8_t>(item.data()));
+				break;
+			case DupN:
+				ret.bytecode.push_back(static_cast<uint8_t>(Instruction::DUPN));
+				solAssert(item.data() < 256);
+				ret.bytecode.push_back(static_cast<uint8_t>(item.data()));
 				break;
 			default:
 				solAssert(false, "Unexpected opcode while assembling.");
