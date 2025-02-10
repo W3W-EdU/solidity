@@ -263,12 +263,11 @@ GasMeter::GasConsumption GasMeter::memoryGas(int _stackPosOffset, int _stackPosS
 		}));
 }
 
-unsigned GasMeter::runGas(Instruction _instruction, langutil::EVMVersion _evmVersion)
+namespace
 {
-	if (_instruction == Instruction::JUMPDEST)
-		return 1;
-
-	switch (instructionInfo(_instruction, _evmVersion).gasPriceTier)
+std::optional<unsigned> gasCostForTier(Tier _tier)
+{
+	switch (_tier)
 	{
 	case Tier::Zero:        return GasCosts::tier0Gas;
 	case Tier::Base:        return GasCosts::tier1Gas;
@@ -286,9 +285,20 @@ unsigned GasMeter::runGas(Instruction _instruction, langutil::EVMVersion _evmVer
 
 	case Tier::Special:
 	case Tier::Invalid:
-		assertThrow(false, OptimizerException, "Invalid gas tier for instruction " + instructionInfo(_instruction, _evmVersion).name);
+		return std::nullopt;
 	}
 	util::unreachable();
+}
+}
+
+unsigned GasMeter::runGas(Instruction _instruction, langutil::EVMVersion _evmVersion)
+{
+	if (_instruction == Instruction::JUMPDEST)
+		return 1;
+
+	if (auto gasCost = gasCostForTier(instructionInfo(_instruction, _evmVersion).gasPriceTier))
+		return *gasCost;
+	assertThrow(false, OptimizerException, "Invalid gas tier for instruction " + instructionInfo(_instruction, _evmVersion).name);
 }
 
 unsigned GasMeter::pushGas(u256 _value, langutil::EVMVersion _evmVersion)
@@ -299,14 +309,22 @@ unsigned GasMeter::pushGas(u256 _value, langutil::EVMVersion _evmVersion)
 	);
 }
 
-unsigned GasMeter::swapGas(size_t)
+unsigned GasMeter::swapGas(size_t _depth, langutil::EVMVersion _evmVersion)
 {
-	return 3;
+	if (_depth <= 16)
+		return runGas(evmasm::swapInstruction(static_cast<unsigned>(_depth)), _evmVersion);
+	auto gasCost = gasCostForTier(instructionInfo(evmasm::Instruction::SWAPN, _evmVersion).gasPriceTier);
+	assertThrow(gasCost.has_value(), OptimizerException, "Expected gas cost for SWAPN to be defined.");
+	return *gasCost;
 }
 
-unsigned GasMeter::dupGas(size_t)
+unsigned GasMeter::dupGas(size_t _depth, langutil::EVMVersion _evmVersion)
 {
-	return 3;
+	if (_depth <= 16)
+		return runGas(evmasm::swapInstruction(static_cast<unsigned>(_depth)), _evmVersion);
+	auto gasCost = gasCostForTier(instructionInfo(evmasm::Instruction::DUPN, _evmVersion).gasPriceTier);
+	assertThrow(gasCost.has_value(), OptimizerException, "Expected gas cost for DUPN to be defined.");
+	return *gasCost;
 }
 
 u256 GasMeter::dataGas(bytes const& _data, bool _inCreation, langutil::EVMVersion _evmVersion)

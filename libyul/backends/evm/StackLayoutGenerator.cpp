@@ -782,7 +782,7 @@ void StackLayoutGenerator::fillInJunk(CFG::BasicBlock const& _block, CFG::Functi
 			if (_swapDepth > m_reachableStackDepth)
 				opGas += 1000;
 			else
-				opGas += evmasm::GasMeter::swapGas(_swapDepth);
+				opGas += evmasm::GasMeter::swapGas(_swapDepth, langutil::EVMVersion{});
 		};
 		auto dupOrPush = [&](StackSlot const& _slot)
 		{
@@ -793,7 +793,7 @@ void StackLayoutGenerator::fillInJunk(CFG::BasicBlock const& _block, CFG::Functi
 				if (auto depth = util::findOffset(_source | ranges::views::reverse, _slot))
 				{
 					if (*depth < m_reachableStackDepth)
-						opGas += evmasm::GasMeter::dupGas(*depth + 1);
+						opGas += evmasm::GasMeter::dupGas(*depth + 1, langutil::EVMVersion{});
 					else
 						opGas += 1000;
 				}
