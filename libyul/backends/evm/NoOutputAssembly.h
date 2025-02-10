@@ -90,8 +90,8 @@ public:
 	void appendAuxDataLoadN(uint16_t) override;
 	void appendEOFCreate(ContainerID) override;
 	void appendReturnContract(ContainerID) override;
-	void appendSwapN(uint8_t) override {}
-	void appendDupN(uint8_t) override;
+	void appendSwapN(size_t) override {}
+	void appendDupN(size_t) override;
 
 	void markAsInvalid() override {}
 

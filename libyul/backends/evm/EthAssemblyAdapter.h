@@ -74,8 +74,8 @@ public:
 
 	void appendAuxDataLoadN(uint16_t _offset) override;
 
-	void appendSwapN(uint8_t _depth) override;
-	void appendDupN(uint8_t _depth) override;
+	void appendSwapN(size_t _depth) override;
+	void appendDupN(size_t _depth) override;
 
 	void markAsInvalid() override;
 

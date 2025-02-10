@@ -114,7 +114,7 @@ void NoOutputAssembly::appendAssemblySize()
 	appendInstruction(evmasm::Instruction::PUSH1);
 }
 
-void NoOutputAssembly::appendDupN(uint8_t)
+void NoOutputAssembly::appendDupN(size_t)
 {
 	m_stackHeight++;
 }

@@ -149,11 +149,11 @@ public:
 		solAssert(_tag.type() == Tag);
 		return AssemblyItem(ConditionalRelativeJump, Instruction::RJUMPI, _tag.data(), _debugData);
 	}
-	static AssemblyItem swapn(uint8_t _depth, langutil::DebugData::ConstPtr _debugData = langutil::DebugData::create())
+	static AssemblyItem swapn(size_t _depth, langutil::DebugData::ConstPtr _debugData = langutil::DebugData::create())
 	{
 		return AssemblyItem(SwapN, Instruction::SWAPN, _depth, _debugData);
 	}
-	static AssemblyItem dupn(uint8_t _depth, langutil::DebugData::ConstPtr _debugData = langutil::DebugData::create())
+	static AssemblyItem dupn(size_t _depth, langutil::DebugData::ConstPtr _debugData = langutil::DebugData::create())
 	{
 		return AssemblyItem(DupN, Instruction::DUPN, _depth, _debugData);
 	}

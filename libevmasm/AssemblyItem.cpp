@@ -212,9 +212,9 @@ size_t AssemblyItem::arguments() const
 	if (type() == CallF || type() == JumpF)
 		return functionSignature().argsNum;
 	else if (type() == SwapN)
-		return static_cast<size_t>(data()) + 2;
-	else if (type() == DupN)
 		return static_cast<size_t>(data()) + 1;
+	else if (type() == DupN)
+		return static_cast<size_t>(data());
 	else if (hasInstruction())
 	{
 		solAssert(instruction() != Instruction::CALLF && instruction() != Instruction::JUMPF);
@@ -245,7 +245,7 @@ size_t AssemblyItem::returnValues() const
 		return static_cast<size_t>(instructionInfo(instruction(), EVMVersion()).ret);
 	case SwapN:
 	case DupN:
-		return static_cast<size_t>(data()) + 2;
+		return static_cast<size_t>(data()) + 1;
 	case Push:
 	case PushTag:
 	case PushData:

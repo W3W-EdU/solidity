@@ -149,8 +149,8 @@ public:
 	/// EOF auxiliary data in data section and the auxiliary data are different things.
 	virtual void appendToAuxiliaryData(bytes const& _data) = 0;
 
-	virtual void appendSwapN(uint8_t _depth) = 0;
-	virtual void appendDupN(uint8_t _depth) = 0;
+	virtual void appendSwapN(size_t _depth) = 0;
+	virtual void appendDupN(size_t _depth) = 0;
 
 	/// Mark this assembly as invalid. Any attempt to request bytecode from it should throw.
 	virtual void markAsInvalid() = 0;
