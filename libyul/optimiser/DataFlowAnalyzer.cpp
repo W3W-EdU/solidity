@@ -41,6 +41,19 @@ using namespace solidity;
 using namespace solidity::util;
 using namespace solidity::yul;
 
+namespace
+{
+/// Assumes that both input vectors are sorted in ascending order
+bool hasNonemptyIntersectionSorted(std::vector<YulName> const& _vec1, std::vector<YulName> const& _vec2) {
+	size_t i = 0, j = 0;
+	while (i < _vec1.size() && j < _vec2.size()) {
+		if (_vec1[i] == _vec2[j]) return true;
+		_vec1[i] < _vec2[j] ? ++i : ++j;
+	}
+	return false;
+}
+}
+
 DataFlowAnalyzer::DataFlowAnalyzer(
 	Dialect const& _dialect,
 	MemoryAndStorage _analyzeStores,
@@ -263,9 +276,10 @@ void DataFlowAnalyzer::handleAssignment(std::set<YulName> const& _variables, Exp
 	}
 
 	auto const& referencedVariables = movableChecker.referencedVariables();
+	std::vector const referencedVariablesVector(referencedVariables.begin(), referencedVariables.end());
 	for (auto const& name: _variables)
 	{
-		m_state.references[name] = referencedVariables;
+		m_state.references[name] = referencedVariablesVector;
 		if (!_isDeclaration)
 		{
 			// assignment to slot denoted by "name"
@@ -315,7 +329,7 @@ void DataFlowAnalyzer::popScope()
 	m_variableScopes.pop_back();
 }
 
-void DataFlowAnalyzer::clearValues(std::set<YulName> _variables)
+void DataFlowAnalyzer::clearValues(std::set<YulName> const& _variables)
 {
 	// All variables that reference variables to be cleared also have to be
 	// cleared, but not recursively, since only the value of the original
@@ -347,10 +361,12 @@ void DataFlowAnalyzer::clearValues(std::set<YulName> _variables)
 
 	// Also clear variables that reference variables to be cleared.
 	std::set<YulName> referencingVariables;
-	for (auto const& variableToClear: _variables)
-		for (auto const& [ref, names]: m_state.references)
-			if (names.count(variableToClear))
-				referencingVariables.emplace(ref);
+	std::vector const varVec(_variables.begin(), _variables.end());
+	for (auto const& [ref, names]: m_state.references)
+		// instead of checking each `name` in `names`, we check if there is any intersection making use of the
+		// sortedness of the vectors, which can increase performance by up to 50% in pathological cases
+		if (hasNonemptyIntersectionSorted(names, varVec))
+			referencingVariables.emplace(ref);
 
 	// Clear the value and update the reference relation.
 	for (auto const& name: _variables + referencingVariables)
