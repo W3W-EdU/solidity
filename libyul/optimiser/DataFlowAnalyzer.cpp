@@ -265,7 +265,7 @@ void DataFlowAnalyzer::handleAssignment(std::set<YulName> const& _variables, Exp
 	auto const& referencedVariables = movableChecker.referencedVariables();
 	for (auto const& name: _variables)
 	{
-		m_state.references[name] = referencedVariables;
+		m_state.references[name] = std::vector(referencedVariables.begin(), referencedVariables.end());
 		if (!_isDeclaration)
 		{
 			// assignment to slot denoted by "name"
@@ -315,6 +315,18 @@ void DataFlowAnalyzer::popScope()
 	m_variableScopes.pop_back();
 }
 
+namespace
+{
+bool nonemptyIntersection(std::vector<YulName> const& a, std::vector<YulName> const& b) {
+	size_t i = 0, j = 0;
+	while (i < a.size() && j < b.size()) {
+		if (a[i] == b[j]) return true;
+		a[i] < b[j] ? ++i : ++j;
+	}
+	return false;
+}
+}
+
 void DataFlowAnalyzer::clearValues(std::set<YulName> _variables)
 {
 	// All variables that reference variables to be cleared also have to be
@@ -346,11 +358,11 @@ void DataFlowAnalyzer::clearValues(std::set<YulName> _variables)
 	});
 
 	// Also clear variables that reference variables to be cleared.
+	std::vector varVec(_variables.begin(), _variables.end());
 	std::set<YulName> referencingVariables;
-	for (auto const& variableToClear: _variables)
-		for (auto const& [ref, names]: m_state.references)
-			if (names.count(variableToClear))
-				referencingVariables.emplace(ref);
+	for (auto const& [ref, names]: m_state.references)
+		if (nonemptyIntersection(names, varVec))
+			referencingVariables.emplace(ref);
 
 	// Clear the value and update the reference relation.
 	for (auto const& name: _variables + referencingVariables)
