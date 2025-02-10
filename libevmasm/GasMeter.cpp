@@ -299,6 +299,16 @@ unsigned GasMeter::pushGas(u256 _value, langutil::EVMVersion _evmVersion)
 	);
 }
 
+unsigned GasMeter::swapGas(size_t)
+{
+	return 3;
+}
+
+unsigned GasMeter::dupGas(size_t)
+{
+	return 3;
+}
+
 u256 GasMeter::dataGas(bytes const& _data, bool _inCreation, langutil::EVMVersion _evmVersion)
 {
 	bigint gas = 0;
