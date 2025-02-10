@@ -20,7 +20,10 @@
 #include <libyul/optimiser/ASTWalker.h>
 #include <libyul/AST.h>
 #include <libyul/Dialect.h>
-#include <libyul/Utilities.h>
+
+#include <libsolutil/Visitor.h>
+
+#include <variant>
 
 using namespace solidity;
 using namespace solidity::yul;
@@ -32,35 +35,49 @@ class MaybeConstFunctionCallFinder: Base
 {
 public:
 	using MaybeConstBlock = std::conditional_t<std::is_const_v<ResultType>, Block const, Block>;
-	static std::vector<ResultType*> run(MaybeConstBlock& _block, std::string_view const _functionName, Dialect const& _dialect)
+	static std::vector<ResultType*> run(MaybeConstBlock& _block, FunctionName const& _functionName, Dialect const& _dialect)
 	{
 		MaybeConstFunctionCallFinder functionCallFinder(_functionName, _dialect);
 		functionCallFinder(_block);
 		return functionCallFinder.m_calls;
 	}
 private:
-	explicit MaybeConstFunctionCallFinder(std::string_view const _functionName, Dialect const& _dialect):
+	explicit MaybeConstFunctionCallFinder(FunctionName const& _functionName, Dialect const& _dialect):
 		m_dialect(_dialect), m_functionName(_functionName), m_calls() {}
 
 	using Base::operator();
 	void operator()(ResultType& _functionCall) override
 	{
 		Base::operator()(_functionCall);
-		if (resolveFunctionName(_functionCall.functionName, m_dialect) == m_functionName)
-			m_calls.emplace_back(&_functionCall);
+		std::visit(util::GenericVisitor{
+			[&](Identifier const& _identifier)
+			{
+				if (std::holds_alternative<Identifier>(m_functionName)
+					&& _identifier.name == std::get<Identifier>(m_functionName).name
+				)
+					m_calls.emplace_back(&_functionCall);
+			},
+			[&](BuiltinName const& _builtinName)
+			{
+				if (std::holds_alternative<BuiltinName>(m_functionName) &&
+					_builtinName.handle == std::get<BuiltinName>(m_functionName).handle
+				)
+					m_calls.emplace_back(&_functionCall);
+			}
+		}, _functionCall.functionName);
 	}
 	Dialect const& m_dialect;
-	std::string_view m_functionName;
+	FunctionName const& m_functionName;
 	std::vector<ResultType*> m_calls;
 };
 }
 
-std::vector<FunctionCall*> solidity::yul::findFunctionCalls(Block& _block, std::string_view const _functionName, Dialect const& _dialect)
+std::vector<FunctionCall*> yul::findFunctionCalls(Block& _block, FunctionName const& _functionName, Dialect const& _dialect)
 {
 	return MaybeConstFunctionCallFinder<ASTModifier, FunctionCall>::run(_block, _functionName, _dialect);
 }
 
-std::vector<FunctionCall const*> solidity::yul::findFunctionCalls(Block const& _block, std::string_view const _functionName, Dialect const& _dialect)
+std::vector<FunctionCall const*> yul::findFunctionCalls(Block const& _block, FunctionName const& _functionName, Dialect const& _dialect)
 {
 	return MaybeConstFunctionCallFinder<ASTWalker, FunctionCall const>::run(_block, _functionName, _dialect);
 }

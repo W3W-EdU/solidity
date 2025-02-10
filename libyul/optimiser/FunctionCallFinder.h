@@ -22,6 +22,7 @@
 
 #include <libyul/ASTForward.h>
 
+#include <libyul/AST.h>
 #include <string_view>
 #include <vector>
 
@@ -35,13 +36,21 @@ class Dialect;
  *
  * Prerequisite: Disambiguator
  */
-std::vector<FunctionCall*> findFunctionCalls(Block& _block, std::string_view _functionName, Dialect const& _dialect);
+std::vector<FunctionCall*> findFunctionCalls(Block& _block, FunctionName const& _functionName, Dialect const& _dialect);
+inline std::vector<FunctionCall*> findFunctionCalls(Block& _block, BuiltinHandle const& _builtin, Dialect const& _dialect)
+{
+	return findFunctionCalls(_block, BuiltinName{nullptr, _builtin}, _dialect);
+}
 
 /**
  * Finds all calls to a function of a given name using an ASTWalker.
  *
  * Prerequisite: Disambiguator
  */
-std::vector<FunctionCall const*> findFunctionCalls(Block const& _block, std::string_view _functionName, Dialect const& _dialect);
+std::vector<FunctionCall const*> findFunctionCalls(Block const& _block, FunctionName const& _functionName, Dialect const& _dialect);
+inline std::vector<FunctionCall const*> findFunctionCalls(Block const& _block, BuiltinHandle const& _builtin, Dialect const& _dialect)
+{
+	return findFunctionCalls(_block, BuiltinName{nullptr, _builtin}, _dialect);
+}
 
 }

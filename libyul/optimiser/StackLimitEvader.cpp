@@ -184,7 +184,10 @@ void StackLimitEvader::run(
 		"StackLimitEvader can only be run on objects using the EVMDialect with object access."
 	);
 
-	std::vector<FunctionCall*> memoryGuardCalls = findFunctionCalls(_astRoot, "memoryguard", *evmDialect);
+	auto const memoryGuardHandle = evmDialect->findBuiltin("memoryguard");
+	if (!memoryGuardHandle)
+		return;
+	std::vector<FunctionCall*> const memoryGuardCalls = findFunctionCalls(_astRoot, *memoryGuardHandle, *evmDialect);
 	// Do not optimise, if no ``memoryguard`` call is found.
 	if (memoryGuardCalls.empty())
 		return;
@@ -216,7 +219,7 @@ void StackLimitEvader::run(
 	StackToMemoryMover::run(_context, reservedMemory, memoryOffsetAllocator.slotAllocations, requiredSlots, _astRoot);
 
 	reservedMemory += 32 * requiredSlots;
-	for (FunctionCall* memoryGuardCall: findFunctionCalls(_astRoot, "memoryguard", *evmDialect))
+	for (FunctionCall* memoryGuardCall: findFunctionCalls(_astRoot, *memoryGuardHandle, *evmDialect))
 	{
 		Literal* literal = std::get_if<Literal>(&memoryGuardCall->arguments.front());
 		yulAssert(literal && literal->kind == LiteralKind::Number, "");
