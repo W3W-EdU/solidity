@@ -1523,6 +1523,7 @@ void CompilerStack::compileContract(
 	solAssert(!m_viaIR, "");
 	solUnimplementedAssert(!m_eofVersion.has_value(), "Experimental EOF support is only available for via-IR compilation.");
 	solAssert(m_stackState >= AnalysisSuccessful, "");
+	solUnimplementedAssert(!_contract.storageLayoutSpecifier(), "Code generation is not supported for contracts with specified storage layout base.");
 
 	if (_otherCompilers.count(&_contract))
 		return;
@@ -1558,7 +1559,7 @@ void CompilerStack::compileContract(
 void CompilerStack::generateIR(ContractDefinition const& _contract, bool _unoptimizedOnly)
 {
 	solAssert(m_stackState >= AnalysisSuccessful, "");
-
+	solUnimplementedAssert(!_contract.storageLayoutSpecifier(), "Code generation is not supported for contracts with specified storage layout base.");
 	Contract& compiledContract = m_contracts.at(_contract.fullyQualifiedName());
 	if (compiledContract.yulIR)
 	{
