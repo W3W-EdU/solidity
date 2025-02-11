@@ -1,0 +1,69 @@
+JSON AST (compact format):
+
+
+======= ast_compact_json_storage_layout_specifier/input.sol =======
+{
+    "absolutePath": "ast_compact_json_storage_layout_specifier/input.sol",
+    "exportedSymbols": {
+        "C": [
+            4
+        ]
+    },
+    "id": 5,
+    "license": "GPL-3.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+        {
+            "id": 1,
+            "literals": [
+                "solidity",
+                ">=",
+                "0.0"
+            ],
+            "nodeType": "PragmaDirective",
+            "src": "36:22:0"
+        },
+        {
+            "abstract": false,
+            "baseContracts": [],
+            "canonicalName": "C",
+            "contractDependencies": [],
+            "contractKind": "contract",
+            "fullyImplemented": true,
+            "id": 4,
+            "linearizedBaseContracts": [
+                4
+            ],
+            "name": "C",
+            "nameLocation": "69:1:0",
+            "nodeType": "ContractDefinition",
+            "nodes": [],
+            "scope": 5,
+            "src": "60:28:0",
+            "storageLayout": {
+                "baseSlotExpression": {
+                    "hexValue": "31323334",
+                    "id": 2,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "81:4:0",
+                    "typeDescriptions": {
+                        "typeIdentifier": "t_rational_1234_by_1",
+                        "typeString": "int_const 1234"
+                    },
+                    "value": "1234"
+                },
+                "id": 3,
+                "nodeType": "StorageLayoutSpecifier",
+                "src": "71:16:0"
+            },
+            "usedErrors": [],
+            "usedEvents": []
+        }
+    ],
+    "src": "36:53:0"
+}

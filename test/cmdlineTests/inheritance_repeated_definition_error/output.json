@@ -3,24 +3,24 @@
         {
             "component": "general",
             "errorCode": "6668",
-            "formattedMessage": "ParserError: Base contracts were already defined previously.
+            "formattedMessage": "ParserError: More than one inheritance list.
  --> fileA:9:17:
   |
 9 | contract C is A is B {
   |                 ^^
-Note: First inheritance definition is here
+Note: Previous list:
  --> fileA:9:15:
   |
 9 | contract C is A is B {
   |               ^
 
 ",
-            "message": "Base contracts were already defined previously.",
+            "message": "More than one inheritance list.",
             "secondarySourceLocations": [
                 {
                     "end": 105,
                     "file": "fileA",
-                    "message": "First inheritance definition is here",
+                    "message": "Previous list:",
                     "start": 104
                 }
             ],
