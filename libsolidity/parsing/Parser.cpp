@@ -426,7 +426,8 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 		}
 		else if (
 			m_scanner->currentToken() == Token::Identifier &&
-			m_scanner->currentLiteral() == "layout"
+			m_scanner->currentLiteral() == "layout" &&
+			contractKind.first == ContractKind::Contract
 		)
 		{
 			if (storageLayoutSpecifier)
