@@ -86,7 +86,9 @@ bool TypeChecker::visit(ContractDefinition const& _contract)
 
 	ASTNode::listAccept(_contract.baseContracts(), *this);
 
-	if (auto layoutSpecifier = _contract.storageLayoutSpecifier())
+	if (
+		StorageLayoutSpecifier const* layoutSpecifier = _contract.storageLayoutSpecifier()
+	)
 		layoutSpecifier->accept(*this);
 
 	for (auto const& n: _contract.subNodes())

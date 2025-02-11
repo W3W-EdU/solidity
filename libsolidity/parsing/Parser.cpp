@@ -374,7 +374,8 @@ ASTPointer<StorageLayoutSpecifier> Parser::parseStorageLayoutSpecifier()
 {
 	RecursionGuard recursionGuard(*this);
 	ASTNodeFactory nodeFactory(*this);
-	solAssert(*expectIdentifierToken() == "layout");
+	ASTPointer<ASTString> layoutIdentifier = expectIdentifierToken();
+	solAssert(layoutIdentifier && *layoutIdentifier == "layout");
 	if (
 		m_scanner->currentToken() != Token::Identifier ||
 		m_scanner->currentLiteral() != "at"
@@ -386,7 +387,6 @@ ASTPointer<StorageLayoutSpecifier> Parser::parseStorageLayoutSpecifier()
 		);
 
 	advance();
-	nodeFactory.markEndPosition();
 	return nodeFactory.createNode<StorageLayoutSpecifier>(
 		parseExpression()
 	);
@@ -410,12 +410,12 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 	{
 		if (m_scanner->currentToken() == Token::Is)
 		{
-			if (baseContracts.size())
+			if (baseContracts.size() != 0)
 				m_errorReporter.parserError(
 					6668_error,
 					m_scanner->currentLocation(),
-					SecondarySourceLocation().append("First inheritance definition is here", baseContracts[0]->location()),
-					"Base contracts were already defined previously."
+					SecondarySourceLocation().append("Previous list:", baseContracts[0]->location()),
+					"More than one inheritance list."
 				);
 			do
 			{
@@ -433,8 +433,8 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 				m_errorReporter.parserError(
 					8714_error,
 					m_scanner->currentLocation(),
-					SecondarySourceLocation().append("Another storage layout was defined here", storageLayoutSpecifier->location()),
-					"Storage layout was already defined previously."
+					SecondarySourceLocation().append("Previous definition:", storageLayoutSpecifier->location()),
+					"More than one storage layout definition."
 				);
 
 			storageLayoutSpecifier = parseStorageLayoutSpecifier();

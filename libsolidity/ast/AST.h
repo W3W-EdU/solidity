@@ -510,7 +510,7 @@ public:
 		std::vector<ASTPointer<ASTNode>> _subNodes,
 		ContractKind _contractKind = ContractKind::Contract,
 		bool _abstract = false,
-		ASTPointer<StorageLayoutSpecifier> _storageLayoutSpecifier = ASTPointer<StorageLayoutSpecifier>()
+		ASTPointer<StorageLayoutSpecifier> _storageLayoutSpecifier = nullptr
 	):
 		Declaration(_id, _location, _name, std::move(_nameLocation)),
 		StructurallyDocumented(_documentation),
@@ -588,7 +588,8 @@ public:
 
 	bool abstract() const { return m_abstract; }
 
-	ASTPointer<StorageLayoutSpecifier> storageLayoutSpecifier() const { return m_storageLayoutSpecifier; }
+	StorageLayoutSpecifier const* storageLayoutSpecifier() const { return m_storageLayoutSpecifier.get(); }
+	StorageLayoutSpecifier* storageLayoutSpecifier() { return m_storageLayoutSpecifier.get(); }
 
 	ContractDefinition const* superContract(ContractDefinition const& _mostDerivedContract) const;
 	/// @returns the next constructor in the inheritance hierarchy.
@@ -618,14 +619,16 @@ public:
 		ASTPointer<Expression> _expression
 	):
 		ASTNode(_id, _location),
-		m_expression(_expression)
-	{}
+		m_baseSlotExpression(_expression)
+	{
+		solAssert(m_baseSlotExpression);
+	}
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 
-	ASTPointer<Expression const> expression() const { return m_expression; }
+	Expression const& baseSlotExpression() const { return *m_baseSlotExpression; }
 private:
-	ASTPointer<Expression> m_expression;
+	ASTPointer<Expression> m_baseSlotExpression;
 };
 
 /**

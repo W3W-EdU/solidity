@@ -354,16 +354,16 @@ ASTPointer<ContractDefinition> ASTJsonImporter::createContractDefinition(Json co
 		subNodes,
 		contractKind(_node),
 		memberAsBool(_node, "abstract"),
-		nullOrCast<StorageLayoutSpecifier>(member(_node, "storageLayoutSpecifier"))
+		nullOrCast<StorageLayoutSpecifier>(member(_node, "storageLayout"))
 	);
 }
 
 ASTPointer<StorageLayoutSpecifier> ASTJsonImporter::createStorageLayoutSpecifier(Json const& _node)
 {
-	astAssert(_node.contains("expression"));
+	astAssert(_node.contains("baseSlotExpression"), "Expected field \'baseSlotExpression\' is missing.");
 	return createASTNode<StorageLayoutSpecifier>(
 		_node,
-		std::dynamic_pointer_cast<Expression>(convertJsonToASTNode(_node["expression"]))
+		convertJsonToASTNode<Expression>(_node["baseSlotExpression"])
 	);
 }
 

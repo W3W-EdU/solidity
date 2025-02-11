@@ -60,6 +60,7 @@ public:
 	/// Output the json representation of the AST to _stream.
 	void print(std::ostream& _stream, ASTNode const& _node, util::JsonFormat const& _format);
 	Json toJson(ASTNode const& _node);
+	Json toJson(ASTNode const* _node);
 	template <class T>
 	Json toJson(std::vector<ASTPointer<T>> const& _nodes)
 	{

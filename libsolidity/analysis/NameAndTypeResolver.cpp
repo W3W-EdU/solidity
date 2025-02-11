@@ -299,7 +299,9 @@ bool NameAndTypeResolver::resolveNamesAndTypesInternal(ASTNode& _node, bool _res
 			if (!resolveNamesAndTypesInternal(*baseContract, true))
 				success = false;
 
-		if (ASTPointer<StorageLayoutSpecifier> storageLayoutSpecifier = contract->storageLayoutSpecifier())
+		if (
+			StorageLayoutSpecifier* storageLayoutSpecifier = contract->storageLayoutSpecifier()
+		)
 			if (!resolveNamesAndTypesInternal(*storageLayoutSpecifier, true))
 				success = false;
 
