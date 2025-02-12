@@ -1,0 +1,20 @@
+{
+    "errors": [
+        {
+            "component": "general",
+            "formattedMessage": "Unknown exception during compilation: /solidity/libsolidity/interface/StandardCompiler.cpp(1383): Throw in function solidity::Json solidity::frontend::StandardCompiler::compileSolidity(InputsAndSettings)
+Dynamic exception type: boost::wrapexcept<solidity::util::Exception>
+std::exception::what: Failed to import AST: Expected field 'baseSlotExpression' is missing.
+[solidity::util::tag_comment*] = Failed to import AST: Expected field 'baseSlotExpression' is missing.
+",
+            "message": "Unknown exception during compilation: /solidity/libsolidity/interface/StandardCompiler.cpp(1383): Throw in function solidity::Json solidity::frontend::StandardCompiler::compileSolidity(InputsAndSettings)
+Dynamic exception type: boost::wrapexcept<solidity::util::Exception>
+std::exception::what: Failed to import AST: Expected field 'baseSlotExpression' is missing.
+[solidity::util::tag_comment*] = Failed to import AST: Expected field 'baseSlotExpression' is missing.
+",
+            "severity": "error",
+            "type": "Exception"
+        }
+    ],
+    "sources": {}
+}
