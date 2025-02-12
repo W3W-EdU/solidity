@@ -1104,6 +1104,7 @@ Json const& CompilerStack::storageLayout(Contract const& _contract) const
 	solAssert(m_stackState >= AnalysisSuccessful, "Analysis was not successful.");
 	solAssert(_contract.contract);
 	solUnimplementedAssert(!isExperimentalSolidity());
+	solUnimplementedAssert(!_contract.contract->storageLayoutSpecifier(), "Storage layout not supported for contract with specified layout base.");
 
 	return _contract.storageLayout.init([&]{ return StorageLayout().generate(*_contract.contract, DataLocation::Storage); });
 }
