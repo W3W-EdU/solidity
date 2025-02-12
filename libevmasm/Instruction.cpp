@@ -172,6 +172,8 @@ std::map<std::string, Instruction> const solidity::evmasm::c_instructions =
 	{ "CALLF", Instruction::CALLF },
 	{ "RETF", Instruction::RETF },
 	{ "JUMPF", Instruction::JUMPF },
+	{ "DUPN", Instruction::DUPN },
+	{ "SWAPN", Instruction::SWAPN },
 	{ "RJUMP", Instruction::RJUMP },
 	{ "RJUMPI", Instruction::RJUMPI },
 	{ "EOFCREATE", Instruction::EOFCREATE },

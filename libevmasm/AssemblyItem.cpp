@@ -91,7 +91,6 @@ std::pair<std::string, std::string> AssemblyItem::nameAndData(langutil::EVMVersi
 	case RetF:
 		return {instructionInfo(instruction(), _evmVersion).name, ""};
 	case SwapN:
-		return {instructionInfo(instruction(), _evmVersion).name, util::toString(static_cast<size_t>(data())) };
 	case DupN:
 		return {instructionInfo(instruction(), _evmVersion).name, util::toString(static_cast<size_t>(data())) };
 	case Push:

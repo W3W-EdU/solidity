@@ -88,9 +88,9 @@ public:
 	AssemblyItem newPushLibraryAddress(std::string const& _identifier);
 	AssemblyItem newPushImmutable(std::string const& _identifier);
 	AssemblyItem newImmutableAssignment(std::string const& _identifier);
-	AssemblyItem newAuxDataLoadN(size_t offset);
-	AssemblyItem newSwapN(size_t _depth);
-	AssemblyItem newDupN(size_t _depth);
+	AssemblyItem newAuxDataLoadN(size_t offset) const;
+	AssemblyItem newSwapN(size_t _depth) const;
+	AssemblyItem newDupN(size_t _depth) const;
 
 	AssemblyItem const& append(AssemblyItem _i);
 	AssemblyItem const& append(bytes const& _data) { return append(newData(_data)); }
