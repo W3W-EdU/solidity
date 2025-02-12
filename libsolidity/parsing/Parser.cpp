@@ -439,6 +439,10 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition()
 				);
 
 			storageLayoutSpecifier = parseStorageLayoutSpecifier();
+			solAssert(
+				storageLayoutSpecifier &&
+				storageLayoutSpecifier->location().contains(storageLayoutSpecifier->baseSlotExpression().location())
+			);
 		}
 		else
 			break;
