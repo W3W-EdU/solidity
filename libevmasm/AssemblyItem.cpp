@@ -19,6 +19,7 @@
 #include <libevmasm/AssemblyItem.h>
 
 #include <libevmasm/Assembly.h>
+#include <libevmasm/SemanticInformation.h>
 
 #include <libsolutil/CommonData.h>
 #include <libsolutil/CommonIO.h>
@@ -284,8 +285,10 @@ bool AssemblyItem::canBeFunctional() const
 	case ConditionalRelativeJump:
 	case CallF:
 	case JumpF:
+	case SwapN:
+	case DupN:
 	case RetF:
-		return !isDupInstruction(instruction()) && !isSwapInstruction(instruction());
+		return !SemanticInformation::isDupInstruction(*this) && !SemanticInformation::isSwapInstruction(*this);
 	case Push:
 	case PushTag:
 	case PushData:
@@ -297,8 +300,6 @@ bool AssemblyItem::canBeFunctional() const
 	case PushImmutable:
 	case AuxDataLoadN:
 		return true;
-	case SwapN:
-	case DupN:
 	case Tag:
 		return false;
 	case AssignImmutable:

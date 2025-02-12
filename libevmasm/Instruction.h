@@ -234,18 +234,6 @@ inline bool isPushInstruction(Instruction _inst)
 	return Instruction::PUSH0 <= _inst && _inst <= Instruction::PUSH32;
 }
 
-/// @returns true if the instruction is a DUP
-inline bool isDupInstruction(Instruction _inst)
-{
-	return Instruction::DUP1 <= _inst && _inst <= Instruction::DUP16;
-}
-
-/// @returns true if the instruction is a SWAP
-inline bool isSwapInstruction(Instruction _inst)
-{
-	return Instruction::SWAP1 <= _inst && _inst <= Instruction::SWAP16;
-}
-
 /// @returns true if the instruction is a LOG
 inline bool isLogInstruction(Instruction _inst)
 {
@@ -256,18 +244,6 @@ inline bool isLogInstruction(Instruction _inst)
 inline unsigned getPushNumber(Instruction _inst)
 {
 	return static_cast<uint8_t>(_inst) - unsigned(Instruction::PUSH0);
-}
-
-/// @returns the number of DUP Instruction _inst
-inline unsigned getDupNumber(Instruction _inst)
-{
-	return static_cast<uint8_t>(_inst) - unsigned(Instruction::DUP1) + 1;
-}
-
-/// @returns the number of SWAP Instruction _inst
-inline unsigned getSwapNumber(Instruction _inst)
-{
-	return static_cast<uint8_t>(_inst) - unsigned(Instruction::SWAP1) + 1;
 }
 
 /// @returns the number of LOG Instruction _inst
