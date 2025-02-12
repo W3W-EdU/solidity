@@ -384,7 +384,7 @@ expression:
 	expression LBrack index=expression? RBrack # IndexAccess
 	| expression LBrack startIndex=expression? Colon endIndex=expression? RBrack # IndexRangeAccess
 	| expression Period (identifier | Address) # MemberAccess
-	| expression LBrace (namedArgument (Comma namedArgument)*)? RBrace # FunctionCallOptions
+	| expression LBrace (namedArgument (Comma namedArgument)*) RBrace # FunctionCallOptions
 	| expression callArgumentList # FunctionCall
 	| Payable callArgumentList # PayableConversion
 	| Type LParen typeName RParen # MetaType
