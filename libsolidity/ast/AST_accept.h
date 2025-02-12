@@ -1167,7 +1167,7 @@ void ForAllQuantifier::accept(ASTConstVisitor& _visitor) const
 
 void StorageLayoutSpecifier::accept(ASTVisitor& _visitor)
 {
-	if (_visitor.visit(*this))
+	if (_visitor.visit(*this) && m_baseSlotExpression)
 		m_baseSlotExpression->accept(_visitor);
 
 	_visitor.endVisit(*this);
@@ -1175,7 +1175,7 @@ void StorageLayoutSpecifier::accept(ASTVisitor& _visitor)
 
 void StorageLayoutSpecifier::accept(ASTConstVisitor& _visitor) const
 {
-	if (_visitor.visit(*this))
+	if (_visitor.visit(*this) && m_baseSlotExpression)
 		m_baseSlotExpression->accept(_visitor);
 
 	_visitor.endVisit(*this);
